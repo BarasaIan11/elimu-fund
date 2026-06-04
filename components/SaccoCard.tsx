@@ -11,6 +11,7 @@ interface SaccoCardProps {
   mode: "results" | "directory";
   matchPercentage?: number;
   isTopMatch?: boolean;
+  onContact?: () => void; // ← NEW: triggers ContactModal from results page
 }
 
 export const SaccoCard: React.FC<SaccoCardProps> = ({
@@ -18,10 +19,10 @@ export const SaccoCard: React.FC<SaccoCardProps> = ({
   mode,
   matchPercentage,
   isTopMatch = false,
+  onContact,
 }) => {
   const { t } = useLanguage();
 
-  // Helper to format large numbers (e.g. 500000 -> KES 500k)
   const formatMaxLoan = (amount: number) => {
     if (amount >= 1000) {
       return `KES ${amount / 1000}k`;
@@ -29,10 +30,9 @@ export const SaccoCard: React.FC<SaccoCardProps> = ({
     return `KES ${amount}`;
   };
 
-  // Helper to check if a month is in the SACCO's harvest months
   const isSaccoHarvestMonth = (m: string) => {
     return sacco.harvestMonths.some(
-      (shm) => shm.toLowerCase() === m.toLowerCase()
+      (shm) => shm.toLowerCase() === m.toLowerCase(),
     );
   };
 
@@ -54,7 +54,6 @@ export const SaccoCard: React.FC<SaccoCardProps> = ({
             </span>
           </div>
 
-          {/* Mode-specific Badge */}
           {mode === "results" && matchPercentage !== undefined ? (
             <div className="rounded-full bg-light-green border border-green/20 px-3 py-1 text-xs font-bold text-green flex items-center gap-1 shrink-0">
               <span className="h-1.5 w-1.5 rounded-full bg-green animate-pulse" />
@@ -74,7 +73,10 @@ export const SaccoCard: React.FC<SaccoCardProps> = ({
               {t("results.interestRate")}
             </span>
             <span className="text-xl font-black text-amber mt-0.5 block">
-              {sacco.rate}% <span className="text-xs font-semibold text-charcoal/60">p.a</span>
+              {sacco.rate}%{" "}
+              <span className="text-xs font-semibold text-charcoal/60">
+                p.a
+              </span>
             </span>
           </div>
           <div className="p-3 bg-cream/40 border border-stone-100 rounded-xl">
@@ -87,16 +89,16 @@ export const SaccoCard: React.FC<SaccoCardProps> = ({
           </div>
         </div>
 
-        {/* Repayment Timeline / Type Description */}
+        {/* Repayment Timeline */}
         <div className="border-t border-stone-100 pt-4 mb-6">
           {sacco.repayment === "harvest-aligned" ? (
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-xs font-bold text-green">
                 <Calendar size={15} />
-                <span className="uppercase tracking-wide">Harvest-Aligned Repayment</span>
+                <span className="uppercase tracking-wide">
+                  Harvest-Aligned Repayment
+                </span>
               </div>
-              
-              {/* Timeline graphic */}
               <div className="relative pt-2 px-2">
                 <div className="h-[3px] bg-stone-200 rounded-full w-full" />
                 <div className="flex justify-between items-center relative -translate-y-[6px]">
@@ -136,31 +138,37 @@ export const SaccoCard: React.FC<SaccoCardProps> = ({
             <div className="p-3 bg-cream/30 border border-stone-100 rounded-xl space-y-1">
               <div className="flex items-center gap-2 text-xs font-bold text-charcoal">
                 <CheckCircle2 size={14} className="text-amber" />
-                <span className="uppercase tracking-wide">Flexible Repayment</span>
+                <span className="uppercase tracking-wide">
+                  Flexible Repayment
+                </span>
               </div>
               <p className="text-[11px] text-charcoal/70 leading-relaxed font-semibold">
-                Bi-Monthly Installments: Allows grace periods during planting/low-income seasons.
+                Bi-Monthly Installments: Allows grace periods during
+                planting/low-income seasons.
               </p>
             </div>
           ) : (
             <div className="p-3 bg-cream/30 border border-stone-100 rounded-xl space-y-1">
               <div className="flex items-center gap-2 text-xs font-bold text-charcoal">
                 <CheckCircle2 size={14} className="text-amber" />
-                <span className="uppercase tracking-wide">Monthly Repayment</span>
+                <span className="uppercase tracking-wide">
+                  Monthly Repayment
+                </span>
               </div>
               <p className="text-[11px] text-charcoal/70 leading-relaxed font-semibold">
-                Direct salary check-off or standard monthly automatic direct debit.
+                Direct salary check-off or standard monthly automatic direct
+                debit.
               </p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Button Row */}
+      {/* ── Button Row ── */}
       <div className="mt-auto">
         {mode === "results" ? (
           <button
-            onClick={() => alert(`Connecting you to ${sacco.name}...`)}
+            onClick={onContact} // ← FIXED: was alert(), now opens ContactModal
             className={`w-full rounded-full py-3 text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 active:scale-95 ${
               isTopMatch
                 ? "bg-amber text-white hover:bg-amber-hover shadow-md"
