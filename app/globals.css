@@ -3,25 +3,48 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #FAF7F2;
+  --foreground: #1A1A2E;
+  --amber: #C17B2F;
+  --green: #2D6A4F;
+  --terracotta: #E07A5F;
+  --cream: #FAF7F2;
+  --charcoal: #1A1A2E;
+  --light-green: #D8F3DC;
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Woven fabric texture: CSS repeating-linear-gradient diagonal lines at 5% opacity */
+.hero-texture {
+  background-color: #FAF7F2;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(193, 123, 47, 0.04),
+    rgba(193, 123, 47, 0.04) 1px,
+    transparent 1px,
+    transparent 12px
+  ),
+  repeating-linear-gradient(
+    45deg,
+    rgba(193, 123, 47, 0.04),
+    rgba(193, 123, 47, 0.04) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+}
+
+/* Smooth transitions */
+.transition-all-300 {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom form styles */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #2D6A4F;
+  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.2);
 }
