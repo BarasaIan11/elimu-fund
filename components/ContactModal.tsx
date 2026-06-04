@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Sacco } from "../lib/types";
 import { FormData } from "../lib/types";
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,7 +37,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<Tab>("call");
   const [copiedPhone, setCopiedPhone] = useState(false);
-  const referralRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen || !sacco.contact) return null;
 
@@ -144,8 +143,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
   const tabs = [
     { id: "call" as Tab, label: "Call / Visit", icon: <Phone size={15} /> },
-    { id: "whatsapp" as Tab, label: "WhatsApp", icon: <MessageCircle size={15} /> },
-    { id: "documents" as Tab, label: "Documents", icon: <FileText size={15} /> },
+    {
+      id: "whatsapp" as Tab,
+      label: "WhatsApp",
+      icon: <MessageCircle size={15} />,
+    },
+    {
+      id: "documents" as Tab,
+      label: "Documents",
+      icon: <FileText size={15} />,
+    },
   ];
 
   return (
@@ -170,7 +177,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
           >
             <div className="relative w-full sm:max-w-xl bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-              
               {/* Modal Header */}
               <div className="flex items-start justify-between p-6 pb-4 border-b border-stone-100 shrink-0">
                 <div>
@@ -179,10 +185,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       <span className="h-1.5 w-1.5 rounded-full bg-green animate-pulse" />
                       {matchPercentage}% Match
                     </span>
-                    <span className="text-[10px] font-bold text-amber uppercase tracking-wider border border-amber/20 rounded-full px-2 py-0.5">{sacco.badge}</span>
+                    <span className="text-[10px] font-bold text-amber uppercase tracking-wider border border-amber/20 rounded-full px-2 py-0.5">
+                      {sacco.badge}
+                    </span>
                   </div>
-                  <h2 className="text-xl font-extrabold text-charcoal leading-tight">{sacco.name}</h2>
-                  <p className="text-xs text-charcoal/50 mt-0.5">{sacco.focus}</p>
+                  <h2 className="text-xl font-extrabold text-charcoal leading-tight">
+                    {sacco.name}
+                  </h2>
+                  <p className="text-xs text-charcoal/50 mt-0.5">
+                    {sacco.focus}
+                  </p>
                 </div>
                 <button
                   onClick={onClose}
@@ -213,7 +225,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               {/* Tab Content */}
               <div className="overflow-y-auto flex-grow">
                 <AnimatePresence mode="wait">
-
                   {/* CALL / VISIT TAB */}
                   {activeTab === "call" && (
                     <motion.div
@@ -231,8 +242,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                             <Phone size={18} />
                           </div>
                           <div>
-                            <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Call Direct</p>
-                            <p className="text-lg font-extrabold text-charcoal tracking-wide">{contact.phone}</p>
+                            <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+                              Call Direct
+                            </p>
+                            <p className="text-lg font-extrabold text-charcoal tracking-wide">
+                              {contact.phone}
+                            </p>
                           </div>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -246,7 +261,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                             onClick={handleCopyPhone}
                             className="rounded-full border border-stone-300 text-charcoal px-4 py-2 text-xs font-bold hover:bg-stone-50 transition-colors flex items-center gap-1 justify-center"
                           >
-                            {copiedPhone ? <Check size={12} className="text-green" /> : <Copy size={12} />}
+                            {copiedPhone ? (
+                              <Check size={12} className="text-green" />
+                            ) : (
+                              <Copy size={12} />
+                            )}
                             {copiedPhone ? "Copied!" : "Copy"}
                           </button>
                         </div>
@@ -261,8 +280,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                           className="flex items-center gap-3 p-3 rounded-xl border border-stone-200 hover:border-amber/30 hover:bg-amber/5 transition-all group"
                         >
                           <Globe size={16} className="text-amber shrink-0" />
-                          <span className="text-sm font-semibold text-charcoal/80 group-hover:text-charcoal">{contact.website}</span>
-                          <ExternalLink size={14} className="text-stone-400 ml-auto group-hover:text-amber" />
+                          <span className="text-sm font-semibold text-charcoal/80 group-hover:text-charcoal">
+                            {contact.website}
+                          </span>
+                          <ExternalLink
+                            size={14}
+                            className="text-stone-400 ml-auto group-hover:text-amber"
+                          />
                         </a>
                       )}
 
@@ -274,11 +298,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                         </h3>
                         <div className="space-y-2">
                           {contact.branches.map((branch, i) => (
-                            <div key={i} className="flex items-start gap-2 p-3 bg-cream/40 rounded-xl border border-stone-100">
+                            <div
+                              key={i}
+                              className="flex items-start gap-2 p-3 bg-cream/40 rounded-xl border border-stone-100"
+                            >
                               <span className="h-5 w-5 rounded-full bg-amber/10 text-amber text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
                                 {i + 1}
                               </span>
-                              <span className="text-sm text-charcoal/80 font-medium">{branch}</span>
+                              <span className="text-sm text-charcoal/80 font-medium">
+                                {branch}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -303,8 +332,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                             <MessageCircle size={18} />
                           </div>
                           <div>
-                            <p className="text-sm font-extrabold text-charcoal">WhatsApp {sacco.name}</p>
-                            <p className="text-xs text-charcoal/50">Pre-filled with your application details</p>
+                            <p className="text-sm font-extrabold text-charcoal">
+                              WhatsApp {sacco.name}
+                            </p>
+                            <p className="text-xs text-charcoal/50">
+                              Pre-filled with your application details
+                            </p>
                           </div>
                         </div>
                         <a
@@ -320,21 +353,56 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
                       {/* Message Preview */}
                       <div>
-                        <h3 className="text-xs font-extrabold text-charcoal uppercase tracking-wider mb-3">Message Preview</h3>
+                        <h3 className="text-xs font-extrabold text-charcoal uppercase tracking-wider mb-3">
+                          Message Preview
+                        </h3>
                         <div className="bg-[#ECE5DD] rounded-2xl p-4 relative">
                           <div className="bg-white rounded-xl p-3 shadow-sm text-sm text-charcoal/80 leading-relaxed space-y-1 max-h-48 overflow-y-auto">
-                            <p>Hello <strong>{sacco.name}</strong>,</p>
-                            <p>I was matched with your SACCO through ElimuFund (<strong>{matchPercentage}% match</strong>).</p>
+                            <p>
+                              Hello <strong>{sacco.name}</strong>,
+                            </p>
+                            <p>
+                              I was matched with your SACCO through ElimuFund (
+                              <strong>{matchPercentage}% match</strong>).
+                            </p>
                             <p className="font-bold mt-2">My Details:</p>
-                            <p>• Name: <strong>{formData?.name || "—"}</strong></p>
-                            <p>• County: <strong>{formData?.county || "—"}</strong></p>
-                            <p>• Occupation: <strong>{formData?.occupation || "—"}</strong></p>
-                            <p>• Loan Needed: <strong>KES {formData?.loanAmount.toLocaleString() || "—"}</strong></p>
-                            <p>• School Term: <strong>{formData?.schoolTerm || "—"}</strong></p>
-                            <p>• Peak Months: <strong>{formData?.harvestMonths.join(", ") || "Regular monthly"}</strong></p>
-                            <p className="mt-2">Kindly guide me on the next steps to apply for a school fees loan. Thank you.</p>
+                            <p>
+                              • Name: <strong>{formData?.name || "—"}</strong>
+                            </p>
+                            <p>
+                              • County:{" "}
+                              <strong>{formData?.county || "—"}</strong>
+                            </p>
+                            <p>
+                              • Occupation:{" "}
+                              <strong>{formData?.occupation || "—"}</strong>
+                            </p>
+                            <p>
+                              • Loan Needed:{" "}
+                              <strong>
+                                KES{" "}
+                                {formData?.loanAmount.toLocaleString() || "—"}
+                              </strong>
+                            </p>
+                            <p>
+                              • School Term:{" "}
+                              <strong>{formData?.schoolTerm || "—"}</strong>
+                            </p>
+                            <p>
+                              • Peak Months:{" "}
+                              <strong>
+                                {formData?.harvestMonths.join(", ") ||
+                                  "Regular monthly"}
+                              </strong>
+                            </p>
+                            <p className="mt-2">
+                              Kindly guide me on the next steps to apply for a
+                              school fees loan. Thank you.
+                            </p>
                           </div>
-                          <div className="absolute bottom-5 right-6 text-[10px] text-charcoal/40">✓✓</div>
+                          <div className="absolute bottom-5 right-6 text-[10px] text-charcoal/40">
+                            ✓✓
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -352,13 +420,26 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     >
                       {/* Required Documents */}
                       <div>
-                        <h3 className="text-xs font-extrabold text-charcoal uppercase tracking-wider mb-1">Required Documents</h3>
-                        <p className="text-xs text-charcoal/50 mb-4">Bring these when visiting a branch or submitting your application</p>
+                        <h3 className="text-xs font-extrabold text-charcoal uppercase tracking-wider mb-1">
+                          Required Documents
+                        </h3>
+                        <p className="text-xs text-charcoal/50 mb-4">
+                          Bring these when visiting a branch or submitting your
+                          application
+                        </p>
                         <div className="space-y-2">
                           {contact.documents.map((doc, i) => (
-                            <div key={i} className="flex items-center gap-3 p-3 bg-cream/40 rounded-xl border border-stone-100">
-                              <CheckCircle2 size={16} className="text-green shrink-0" />
-                              <span className="text-sm text-charcoal/80 font-medium">{doc}</span>
+                            <div
+                              key={i}
+                              className="flex items-center gap-3 p-3 bg-cream/40 rounded-xl border border-stone-100"
+                            >
+                              <CheckCircle2
+                                size={16}
+                                className="text-green shrink-0"
+                              />
+                              <span className="text-sm text-charcoal/80 font-medium">
+                                {doc}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -367,9 +448,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       {/* Referral Card Download */}
                       <div className="p-4 bg-amber/5 border border-amber/20 rounded-2xl space-y-3">
                         <div>
-                          <h3 className="text-sm font-extrabold text-charcoal">Your ElimuFund Referral Card</h3>
+                          <h3 className="text-sm font-extrabold text-charcoal">
+                            Your ElimuFund Referral Card
+                          </h3>
                           <p className="text-xs text-charcoal/60 mt-1">
-                            Print this card and carry it to the SACCO. It shows your pre-screened profile and ElimuFund match score.
+                            Print this card and carry it to the SACCO. It shows
+                            your pre-screened profile and ElimuFund match score.
                           </p>
                         </div>
                         <button
@@ -385,17 +469,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       </div>
                     </motion.div>
                   )}
-
                 </AnimatePresence>
               </div>
 
               {/* Modal Footer */}
               <div className="p-4 border-t border-stone-100 bg-cream/30 shrink-0">
                 <p className="text-[10px] text-center text-charcoal/40 leading-relaxed">
-                  ElimuFund is a matching platform, not a lender. Approval is subject to SACCO membership and eligibility criteria.
+                  ElimuFund is a matching platform, not a lender. Approval is
+                  subject to SACCO membership and eligibility criteria.
                 </p>
               </div>
-
             </div>
           </motion.div>
         </>
